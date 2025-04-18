@@ -28,7 +28,7 @@
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
 
                                 <?php foreach ($menu_subs as $sub): ?>
-                                    <a class="nav-link <?= ($_SESSION['sub'] === $sub['slug']) ? 'active' : ''; ?>" href="<?= htmlspecialchars($sub['link']); ?>">
+                                    <a class="nav-link <?= ($_SESSION['sub'] === $sub['slug']) ? 'active' : ''; ?>" href="<?= BASEURL; ?><?= htmlspecialchars($sub['link']); ?>">
                                         <?= htmlspecialchars($sub['name']); ?>
                                     </a>
                                 <?php endforeach; ?>
