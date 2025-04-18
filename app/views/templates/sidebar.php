@@ -9,6 +9,13 @@
                     <div class="nav-link-icon"><i data-feather="activity"></i></div>
                     Dashboards
                 </a>
+                <!-- Sidenav Menu Heading (Management Stock)-->
+                <div class="sidenav-menu-heading">Management Stock</div>
+                <!-- Sidenav Accordion (Dashboard)-->
+                <a class="nav-link" href="<?= BASEURL; ?>">
+                    <div class="nav-link-icon"><i data-feather="activity"></i></div>
+                    Dashboards
+                </a>
             </div>
         </div>
         <!-- Sidenav Footer-->
