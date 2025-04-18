@@ -1,13 +1,16 @@
 <?php
 class Auth extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
+        if (isset($_SESSION['auth']) && $_SESSION['auth'] == true) {
+            header('Location: ' . BASEURL . 'home');
             exit;
         }
-        if (isset($_COOKIE['remember_token'])) {
+    }
+    public function index()
+    {
+        if (isset($_COOKIE['remember_token']) && !isset($_SESSION['flash'])) {
             $token = htmlspecialchars($_COOKIE['remember_token'], ENT_QUOTES, 'UTF-8');
             $user = $this->model('Auth_model')->getUserByToken($token);
             if ($user) {
@@ -18,7 +21,7 @@ class Auth extends Controller
                     'role' => $user['role'],
                     'phone' => $user['whatsapp']
                 ];
-                header('Location: ' . BASEURL . 'home/index');
+                header('Location: ' . BASEURL . 'home');
             }
         }
 
@@ -28,20 +31,12 @@ class Auth extends Controller
 
     public function register()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
         $data['title'] = 'Register';
         $this->view('auth/register', $data);
     }
 
     public function login()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
         $remember = isset($_POST['rememberPasswordCheck']);
         $user = $this->model('Auth_model')->checkUsername($_POST['inputUsername']);
 
@@ -82,12 +77,12 @@ class Auth extends Controller
                         exit;
                     }
 
-                    Flasher::setFlash('success', 'Welcome back, ' . $user['first_name'] . '!', 'You have successfully logged in.', 'home/index', 'Go to Dashboard');
-                    header('Location: ' . BASEURL . 'auth/index');
+                    Flasher::setFlash('success', 'Welcome back, ' . $user['first_name'] . '!', 'You have successfully logged in.', 'home', 'Go to Dashboard');
+                    header('Location: ' . BASEURL . 'auth');
                     exit;
                 } else {
-                    Flasher::setFlash('error', 'Login Failed', 'Invalid password.', 'auth/index', 'Try again');
-                    header('Location: ' . BASEURL . 'auth/index');
+                    Flasher::setFlash('error', 'Login Failed', 'Invalid password.', 'auth', 'Try again');
+                    header('Location: ' . BASEURL . 'auth');
                     exit;
                 }
             } else {
@@ -103,12 +98,12 @@ class Auth extends Controller
                 $this->model('Message_model')->sendMessage($user['whatsapp'], $message);
 
                 Flasher::setFlash('error', 'Account Inactive', 'Please verify no phone.', 'auth/verify', 'Verify Now');
-                header('Location: ' . BASEURL . 'auth/index');
+                header('Location: ' . BASEURL . 'auth');
                 exit;
             }
         } else {
-            Flasher::setFlash('error', 'Login Failed', 'Invalid username.', 'auth/index', 'Try again');
-            header('Location: ' . BASEURL . 'auth/index');
+            Flasher::setFlash('error', 'Login Failed', 'Invalid username.', 'auth', 'Try again');
+            header('Location: ' . BASEURL . 'auth');
             exit;
         }
     }
@@ -122,10 +117,6 @@ class Auth extends Controller
 
     public function verify_phone()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
 
         $expired = $_SESSION['otp_expired'] ?? 0;
         if (time() > $expired) {
@@ -156,10 +147,6 @@ class Auth extends Controller
 
     public function registration()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
 
         if ($this->model('Auth_model')->registerUser($_POST) > 0) {
             Flasher::setFlashMixin('success', 'Registration successful! Please login.');
@@ -210,20 +197,12 @@ class Auth extends Controller
 
     public function forgotPassword()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
         $data['title'] = 'Forgot Password';
         $this->view('auth/forgot_password', $data);
     }
 
     public function passwordRecovery()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
 
         $password = bin2hex(random_bytes(4)); // Generate a random password
         $passwordHash = password_hash($password, PASSWORD_BCRYPT); // Generate and hash a random password
@@ -250,36 +229,18 @@ class Auth extends Controller
 
     public function changePassword()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
         $data['title'] = 'Change Password';
         $this->view('auth/change_password', $data);
     }
 
     public function updatePassword()
     {
-        if (isset($_SESSION['auth'])) {
-            header('Location: ' . BASEURL . 'home/index');
-            exit;
-        }
-
         $password = htmlspecialchars($_POST['inputPassword'], ENT_QUOTES, 'UTF-8');
 
         $this->model('Auth_model')->updatePassword($_SESSION['user']['phone'], $password);
         unset($_SESSION['phone']);
 
         Flasher::setFlashMixin('success', 'Password changed successfully! You can login again.');
-        header('Location: ' . BASEURL . 'auth/index');
-        exit;
-    }
-
-    public function logout()
-    {
-        session_destroy();
-        unset($_SESSION['auth']);
-        setcookie('remember_token', '', time() - 3600, "/");
         header('Location: ' . BASEURL . 'auth/index');
         exit;
     }

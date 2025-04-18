@@ -165,7 +165,7 @@
                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                     Account
                 </a>
-                <a class="dropdown-item" href="<?= BASEURL; ?>auth/logout" id="logoutButton">
+                <a class="dropdown-item" href="<?= BASEURL; ?>logout" id="logoutButton">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>

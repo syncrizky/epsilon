@@ -4,7 +4,6 @@ class Home extends Controller
     public function __construct()
     {
         if (!isset($_SESSION['user'])) {
-            Flasher::setFlash('error', 'Access Denied', 'Please log in to access this page.', 'auth/index', 'Login');
             header('Location: ' . BASEURL . 'auth/index');
             exit;
         }
