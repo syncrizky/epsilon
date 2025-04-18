@@ -13,6 +13,8 @@ class Account extends Controller
 
     public function index()
     {
+        $_SESSION['menu'] = 'home';
+        $_SESSION['sub'] = 'dashboard';
         $data['title'] = 'Home';
         $data['user'] = $this->model('User_model')->getUserById($_SESSION['user']['id']);
         $this->view('templates/header', $data);
