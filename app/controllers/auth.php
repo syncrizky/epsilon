@@ -76,7 +76,7 @@ class Auth extends Controller
                         header('Location: ' . BASEURL . 'auth/changePassword');
                         exit;
                     }
-
+                    ActivityLogger::log($user['id'], 'login', 'User logged in successfully.');
                     Flasher::setFlash('success', 'Welcome back, ' . $user['first_name'] . '!', 'You have successfully logged in.', 'home', 'Go to Dashboard');
                     header('Location: ' . BASEURL . 'auth');
                     exit;
