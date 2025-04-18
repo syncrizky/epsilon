@@ -2,20 +2,41 @@
     <nav class="sidenav shadow-right sidenav-light">
         <div class="sidenav-menu">
             <div class="nav accordion" id="accordionSidenav">
+                <?php
+                $db = new Database();
+                $db->query("SELECT * FROM menus");
+                $menus = $db->resultSet();
+                ?>
                 <!-- Sidenav Menu Heading (Core)-->
                 <div class="sidenav-menu-heading">Core</div>
                 <!-- Sidenav Accordion (Dashboard)-->
-                <a class="nav-link" href="<?= BASEURL; ?>">
-                    <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                    Dashboards
-                </a>
-                <!-- Sidenav Menu Heading (Management Stock)-->
-                <div class="sidenav-menu-heading">Management Stock</div>
-                <!-- Sidenav Accordion (Dashboard)-->
-                <a class="nav-link" href="<?= BASEURL; ?>">
-                    <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                    Dashboards
-                </a>
+                <?php foreach ($menus as $menu): ?>
+                    <a class="nav-link  <?php echo ($_SESSION['menu'] == $menu['slug']) ? 'active collapse' : 'collapsed'; ?>" href="<?php echo ($menu['have_sub'] == 0) ? BASEURL . $menu['link'] : ''; ?>" <?php echo ($menu['have_sub'] == 1) ? 'data-bs-toggle="collapse" data-bs-target="#' . htmlspecialchars($menu['slug']) . '"' : ''; ?>>
+                        <div class="nav-link-icon "><i data-feather="<?= $menu['feather_ico']; ?>"></i></div>
+                        <?= $menu['name']; ?>
+                        <?php if ($menu['have_sub'] == 1): ?>
+                            <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        <?php endif; ?>
+                    </a>
+                    <?php
+                    $db->query("SELECT * FROM menu_sub WHERE menu_id = :menu_id");
+                    $db->bind(':menu_id', $menu['id']);
+                    $menu_subs = $db->resultSet();
+                    ?>
+                    <?php if ($menu['have_sub'] == 1): ?>
+                        <div class="<?php echo ($_SESSION['menu'] == $menu['slug']) ? 'collapsed' : 'collapse'; ?>" id="<?= htmlspecialchars($menu['slug']); ?>" data-bs-parent="#accordionSidenav">
+                            <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+
+                                <?php foreach ($menu_subs as $sub): ?>
+                                    <a class="nav-link <?= ($_SESSION['sub'] === $sub['slug']) ? 'active' : ''; ?>" href="<?= htmlspecialchars($sub['link']); ?>">
+                                        <?= htmlspecialchars($sub['name']); ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </nav>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
             </div>
         </div>
         <!-- Sidenav Footer-->

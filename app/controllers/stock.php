@@ -1,5 +1,5 @@
 <?php
-class Home extends Controller
+class Stock extends Controller
 {
     public function __construct()
     {
@@ -8,20 +8,18 @@ class Home extends Controller
             exit;
         }
     }
+
     public function index()
     {
-        if (isset($_SESSION['user'])) {
-            $_SESSION['auth'] = true;
-        }
-
+        $data['main'] = 'Stock';
         $data['title'] = 'Dashboard';
-        $_SESSION['menu'] = 'home';
-        $_SESSION['sub'] = 'dashboard';
+        $_SESSION['menu'] = 'stock';
+        $_SESSION['sub'] = 'dashboard stock';
 
         $this->view('templates/header', $data);
         $this->view('templates/navbar', $data);
         $this->view('templates/sidebar', $data);
-        $this->view('home/index', $data);
+        $this->view('stock/index', $data);
         $this->view('templates/footer');
     }
 }
