@@ -18,13 +18,13 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="me-3">
                                 <div class="text-white-75 small">Purchase Order (Draft)</div>
-                                <div class="text-lg fw-bold">$40,000</div>
+                                <div class="text-lg fw-bold"><?= $data['purchase_order_draft_count']; ?></div>
                             </div>
                             <i class="feather-xl text-white-50" data-feather="calendar"></i>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <a class="text-white stretched-link" href="#!">View Report</a>
+                        <a class="text-white stretched-link" href="<?= BASEURL; ?>purchaseorder/index/draft">View Draft</a>
                         <div class="text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -35,13 +35,13 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="me-3">
                                 <div class="text-white-75 small">Purchase Order (Approve)</div>
-                                <div class="text-lg fw-bold">$215,000</div>
+                                <div class="text-lg fw-bold"><?= $data['purchase_order_approve_count']; ?></div>
                             </div>
                             <i class="feather-xl text-white-50" data-feather="dollar-sign"></i>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <a class="text-white stretched-link" href="#!">View Report</a>
+                        <a class="text-white stretched-link" href="<?= BASEURL; ?>purchaseorder/index/approve">View Approve</a>
                         <div class="text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -52,13 +52,13 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="me-3">
                                 <div class="text-white-75 small">Purchase (Incoming)</div>
-                                <div class="text-lg fw-bold">24</div>
+                                <div class="text-lg fw-bold"><?= $data['purchase_order_incoming_count']; ?></div>
                             </div>
                             <i class="feather-xl text-white-50" data-feather="check-square"></i>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <a class="text-white stretched-link" href="#!">View Tasks</a>
+                        <a class="text-white stretched-link" href="<?= BASEURL; ?>purchaseorder/index/incoming">View Incoming</a>
                         <div class="text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>

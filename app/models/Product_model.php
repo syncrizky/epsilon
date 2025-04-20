@@ -66,4 +66,44 @@ class Product_model
         $this->db->query("SELECT COUNT(*) AS count FROM " . $this->table);
         return $this->db->single()['count'];
     }
+
+    public function getAllProductBySupplierId($supplierId)
+    {
+        $this->db->query("SELECT 
+                      p.sku AS sku, 
+                      p.name AS name, 
+                      b.name AS brand, 
+                      p.category AS category, 
+                      p.grup AS `group`,
+                        p.stock AS stock,
+                        p.price AS price,
+                        p.discount AS discount,
+                        p.hpp AS hpp,
+                        p.het AS het
+                  FROM products p
+                  JOIN brands b ON p.brand_id = b.id
+                  WHERE p.supplier_id = :supplier_id
+                  ORDER BY p.id ASC");
+        $this->db->bind('supplier_id', $supplierId);
+        return $this->db->resultSet();
+    }
+
+    public function getProductBySku($sku)
+    {
+        $this->db->query("SELECT 
+                      p.sku AS sku, 
+                      p.name AS name, 
+                      b.name AS brand, 
+                      p.category AS category, 
+                      p.grup AS `group`,
+                        p.discount AS discount,
+                        p.hpp AS hpp,
+                        p.het AS het
+                  FROM products p
+                  JOIN brands b ON p.brand_id = b.id
+                  WHERE p.sku = :sku
+                  ORDER BY p.id ASC");
+        $this->db->bind('sku', $sku);
+        return $this->db->single();
+    }
 }

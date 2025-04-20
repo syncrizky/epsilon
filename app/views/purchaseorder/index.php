@@ -16,7 +16,7 @@
                 <div class="dropdown no-caret">
                     <button class="btn btn-transparent-dark btn-icon dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="text-gray-500" data-feather="more-vertical"></i></button>
                     <div class="dropdown-menu dropdown-menu-end animated--fade-in-up" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#!">
+                        <a class="dropdown-item" href="<?= BASEURL; ?>purchaseorder/create">
                             <div class="dropdown-item-icon"><i class="text-gray-500" data-feather="plus-circle"></i></div>
                             Add Purchase Order
                         </a>

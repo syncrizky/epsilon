@@ -18,7 +18,9 @@ class Stock extends Controller
 
         $data['product_count'] = $this->model('Product_model')->getAllProductsCount();
         $data['products'] = $this->model('Product_model')->getAllProductOrderStock();
-        $data['logs'] = $this->model('Log_model')->getAllLogs();
+
+        $params = ['Add Product', 'Update Product', 'Delete Product'];
+        $data['logs'] = $this->model('ActivityLog_model')->getAllLogsWithParams($params);
 
         $this->view('templates/header', $data);
         $this->view('templates/navbar', $data);
