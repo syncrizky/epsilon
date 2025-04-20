@@ -2,7 +2,8 @@
 define('BASEURL', 'http://localhost/epsilon/public/');
 // define('BASEURL', 'http://gds.otosystem.net');
 
-define('APP_NAME', 'Epsilon');
+define('APP_NAME', 'Corelyst');
+define('APP_ENV', 'development'); // development, production, testing
 define('APP_VERSION', '1.0.0');
 
 

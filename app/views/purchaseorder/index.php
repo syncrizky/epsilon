@@ -32,6 +32,7 @@
                             <th>Supplier</th>
                             <th>Shipped</th>
                             <th>Amount</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -42,7 +43,20 @@
                                 <td><?= htmlspecialchars(strtoupper($row['invoice_date'])); ?></td>
                                 <td><?= htmlspecialchars(strtoupper($row['supplier_name'])); ?></td>
                                 <td><?= htmlspecialchars(strtoupper($row['branch_name'])); ?></td>
-                                <td><?= htmlspecialchars(strtoupper($row['invoice_amount'])); ?></td>
+                                <td>Rp. <?= htmlspecialchars(number_format($row['invoice_amount'])); ?></td>
+                                <td>
+                                    <?php if ($row['invoice_status'] == 'draft'): ?>
+                                        <span class="badge text-bg-warning"><?= htmlspecialchars(ucwords($row['invoice_status'])); ?></span>
+                                    <?php elseif ($row['invoice_status'] == 'approved'): ?>
+                                        <span class="badge text-bg-success"><?= htmlspecialchars(ucwords($row['invoice_status'])); ?></span>
+                                    <?php elseif ($row['invoice_status'] == 'incoming'): ?>
+                                        <span class="badge text-bg-primary"><?= htmlspecialchars(ucwords($row['invoice_status'])); ?></span>
+                                    <?php elseif ($row['invoice_status'] == 'completed'): ?>
+                                        <span class="badge text-bg-secondary"><?= htmlspecialchars(ucwords($row['invoice_status'])); ?></span>
+                                    <?php elseif ($row['invoice_status'] == 'canceled'): ?>
+                                        <span class="badge text-bg-danger"><?= htmlspecialchars(ucwords($row['invoice_status'])); ?></span>
+                                    <?php endif; ?>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton<?= $row['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false">

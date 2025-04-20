@@ -22,7 +22,7 @@ class Purchasing extends Controller
         $data['purchase_order_approve_count'] = $this->model('PurchaseOrder_model')->getPurchaseOrderCountByStatus('approve');
         $data['purchase_order_incoming_count'] = $this->model('PurchaseOrder_model')->getPurchaseOrderCountByStatus('incoming');
 
-        $params = ['Add Supplier', 'Update Supplier', 'Delete Supplier'];
+        $params = ['Add Supplier', 'Update Supplier', 'Delete Supplier', 'Add Purchase Order!'];
         $data['logs'] = $this->model('ActivityLog_model')->getAllLogsWithParams($params);
 
         $this->view('templates/header', $data);

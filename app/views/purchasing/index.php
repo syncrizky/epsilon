@@ -69,7 +69,7 @@
                 <div class="card card-header-actions h-100">
                     <div class="card-header">
                         Recent Activity
-                        <div class="dropdown no-caret">
+                        <!-- <div class="dropdown no-caret">
                             <button class="btn btn-transparent-dark btn-icon dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="text-gray-500" data-feather="more-vertical"></i></button>
                             <div class="dropdown-menu dropdown-menu-end animated--fade-in-up" aria-labelledby="dropdownMenuButton">
                                 <h6 class="dropdown-header">Filter Activity:</h6>
@@ -78,7 +78,7 @@
                                 <a class="dropdown-item" href="#!"><span class="badge bg-yellow-soft text-yellow my-1">Server</span></a>
                                 <a class="dropdown-item" href="#!"><span class="badge bg-purple-soft text-purple my-1">Users</span></a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card-body">
                         <div class="timeline timeline-xs">

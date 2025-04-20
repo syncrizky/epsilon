@@ -108,17 +108,36 @@
                                         </tr>
                                 </table>
                                 <div class="text-end">
-                                    <a href="<?= BASEURL; ?>purchaseorder/proses" class="btn btn-primary btn-sm">Simpan</a>
+                                    <button type="button" class="btn btn-primary btn-sm" id="saveButton" onclick="handleSave()">
+                                        Simpan
+                                        <div id="loadingSpinner" class="spinner-border ms-2 spinner-border-sm text-white d-none" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </button>
+                                    <script>
+                                        function handleSave() {
+                                            const spinner = document.getElementById('loadingSpinner');
+                                            const saveButton = document.getElementById('saveButton');
+
+                                            // Disable the button to prevent multiple clicks
+                                            saveButton.disabled = true;
+
+                                            // Show the spinner
+                                            spinner.classList.remove('d-none');
+
+                                            // Redirect to the save URL
+                                            window.location.href = '<?= BASEURL; ?>purchaseorder/proses';
+                                        }
+                                    </script>
+
                                     <a href="<?= BASEURL; ?>purchaseorder/cancel" class="btn btn-outline-danger btn-sm">Cancel</a>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <pre>
-    <?php print_r($_SESSION); ?>
-</pre>
             <div class="tab-pane fade" id="nav-products" role="tabpanel" aria-labelledby="nav-products-tab" tabindex="0">
                 <div class="card card-header-actions mb-4 mt-3">
                     <div class="card-body table-responsive">

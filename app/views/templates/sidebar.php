@@ -4,7 +4,7 @@
             <div class="nav accordion" id="accordionSidenav">
                 <?php
                 $db = new Database();
-                $db->query("SELECT * FROM menus");
+                $db->query("SELECT * FROM menus ORDER BY que ASC");
                 $menus = $db->resultSet();
                 ?>
                 <!-- Sidenav Menu Heading (Core)-->

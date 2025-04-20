@@ -3,7 +3,7 @@
         <div class="container-xl px-4">
             <div class="text-center">
                 <h1 class="text-white">Welcome to <?= APP_NAME; ?></h1>
-                <p class="lead mb-0 text-white-50">A professionally website ERP</p>
+                <p class="lead mb-0 text-white-50">Platform Inti untuk Bisnis Cerdas</p>
             </div>
         </div>
     </header>

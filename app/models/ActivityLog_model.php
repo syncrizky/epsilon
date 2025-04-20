@@ -37,7 +37,7 @@ class ActivityLog_model
                     FROM activity_logs l
                     JOIN users u ON l.user_id = u.id
                     WHERE l.action IN ($placeholders)
-                    ORDER BY l.created_at DESC LIMIT 10");
+                    ORDER BY l.created_at DESC LIMIT 5");
         foreach ($params as $index => $param) {
             $this->db->bind($index + 1, $param);
         }

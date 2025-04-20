@@ -14,7 +14,7 @@ class Purchaseorder extends Controller
         $_SESSION['menu'] = 'purchasing';
         $_SESSION['sub'] = 'purchase_order';
 
-        if ($param = null) {
+        if ($param == null) {
             $data['purchase_orders'] = $this->model('PurchaseOrder_model')->getAllPurchaseOrders();
         } else {
             $data['purchase_orders'] = $this->model('PurchaseOrder_model')->getPurchaseOrderByStatus($param);
@@ -39,7 +39,7 @@ class Purchaseorder extends Controller
         $data['suppliers'] = $this->model('Supplier_model')->getAllSuppliers();
         $data['branches'] = $this->model('Branch_model')->getAllBranches();
 
-        $_SESSION['invoice_number'] = sprintf('PO-%06d', $data['next_po_number']);
+        $_SESSION['invoice_number'] = sprintf('PO-%03d', $data['next_po_number']);
         $_SESSION['cart'] = $_SESSION['cart'] ?? [];
         if (isset($_SESSION['supplier_id']) && empty($_SESSION['cart'])) {
             $_SESSION['products'] = $this->model('Product_model')->getAllProductBySupplierId($_SESSION['supplier_id']);
@@ -52,6 +52,26 @@ class Purchaseorder extends Controller
         $this->view('templates/navbar', $data);
         $this->view('templates/sidebar', $data);
         $this->view('purchaseorder/create', $data);
+        $this->view('templates/footer');
+    }
+
+    public function auth()
+    {
+        if (isset($_SESSION['user'])) {
+            $_SESSION['auth'] = true;
+        }
+
+        $data['title'] = 'Auth Purchase Order';
+        $_SESSION['menu'] = 'authorization';
+        $_SESSION['sub'] = 'purchase_order_auth';
+
+        // $data['suppliers'] = $this->model('Supplier_model')->getAllSuppliers();
+        // $data['branches'] = $this->model('Branch_model')->getAllBranches();
+
+        $this->view('templates/header', $data);
+        $this->view('templates/navbar', $data);
+        $this->view('templates/sidebar', $data);
+        $this->view('purchaseorder/auth', $data);
         $this->view('templates/footer');
     }
 
@@ -127,7 +147,8 @@ class Purchaseorder extends Controller
         unset($_SESSION['supplier_id']);
         unset($_SESSION['branch_id']);
         unset($_SESSION['products']);
-        $_SESSION['invoice_amount'] = 0;
+        unset($_SESSION['invoice_amount']);
+        unset($_SESSION['invoice_number']);
         Flasher::setFlashMixin('info', 'Purchase Order cancelled');
         header('Location: ' . BASEURL . 'purchaseorder');
         exit;
@@ -141,13 +162,13 @@ class Purchaseorder extends Controller
             exit;
         } else {
             $data = [
-                'invoice_number' => $_POST['invoice_number'],
+                'invoice_number' => $_SESSION['invoice_number'],
                 'supplier_id' => $_SESSION['supplier_id'],
                 'branch_id' => $_SESSION['branch_id'],
                 'invoice_date' => date('Y-m-d H:i:s'),
-                'total_amount' => $_SESSION['invoice_amount'],
-                'invoice_status' => 'pending',
-                'create_time' => date('Y-m-d H:i:s'),
+                'invoice_amount' => $_SESSION['invoice_amount'],
+                'invoice_status' => 'draft',
+                'created_at' => date('Y-m-d H:i:s'),
                 'create_user_id' => $_SESSION['user']['id']
             ];
 
@@ -159,16 +180,36 @@ class Purchaseorder extends Controller
                 exit;
             }
 
-            if ($this->model('PurchaseOrderItem_model')->createPurchaseOrderItem($purchaseOrderId, $_SESSION['cart']) > 0) {
-                Flasher::setFlashMixin('success', 'Purchase Order created successfully');
-            } else {
-                Flasher::setFlashMixin('error', 'Failed to create Purchase Order Item');
-                header('Location: ' . BASEURL . 'purchaseorder/create');
-                exit;
-            }
+            foreach ($_SESSION['cart'] as $item) {
+                $itemData = [
+                    'invoice_id' => $purchaseOrderId,
+                    'product_sku' => $item['sku'],
+                    'quantity' => $item['qty'],
+                    'unit_price' => $item['hpp'],
+                    'total_price' => $item['total'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'create_user_id' => $_SESSION['user']['id']
+                ];
+                if ($this->model('PurchaseOrderItem_model')->createPurchaseOrderItem($itemData) > 0) {
+                    ActivityLogger::log($_SESSION['user']['id'], 'Add Purchase Order!', 'Purchase Order #' . htmlspecialchars(ucwords($_SESSION['invoice_number'])) . ' Submitted Successfully');
+                    Flasher::setFlashMixin('success', 'Purchase Order created successfully!');
 
-            Flasher::setFlashMixin('success', 'Purchase Order created successfully');
-            header('Location: ' . BASEURL . 'purchaseorder');
+                    $message = "Purchase Order *#" . htmlspecialchars(ucwords($_SESSION['invoice_number'])) . "* \nhas been created successfully. Please check the system for details.";
+                    $this->model('Message_model')->sendMessage($_SESSION['user']['phone'], $message);
+
+                    unset($_SESSION['cart']);
+                    unset($_SESSION['supplier_id']);
+                    unset($_SESSION['branch_id']);
+                    unset($_SESSION['products']);
+                    unset($_SESSION['invoice_amount']);
+                    unset($_SESSION['invoice_number']);
+                    header('Location: ' . BASEURL . 'purchaseorder');
+                } else {
+                    Flasher::setFlashMixin('error', 'Failed to create Purchase Order Item');
+                    header('Location: ' . BASEURL . 'purchaseorder/create');
+                    exit;
+                }
+            }
         }
         header('Location: ' . BASEURL . 'purchaseorder');
     }
